@@ -504,3 +504,9 @@ void display_setPixel(uint16_t x, uint16_t y, uint16_t color) {
 void display_setRect(uint16_t x, uint16_t y, uint16_t xx, uint16_t yy, uint16_t color) {
     ILI9341_Draw_Rectangle(x, y, xx, yy, color);
 }
+
+void display_clear(uint16_t Colour)
+{
+    ILI9341_Set_Address(0,0,LCD_WIDTH,LCD_HEIGHT);
+    ILI9341_Draw_Colour_Burst(Colour, LCD_WIDTH*LCD_HEIGHT);
+}
