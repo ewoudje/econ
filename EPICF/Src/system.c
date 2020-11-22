@@ -54,26 +54,20 @@ ERROR_CODE EPICF_startLoop() {
         loopFlags = 0;
 
         GAME_INPUT(DOWN)
-        if (GAME_INPUT_RELEASE) {
+        if (GAME_INPUT_ON_RELEASE) {
             loopFlags |= incMenuSelect() ? LOOPFLAG_RMENU : 0;
-        } else {
-            //ON PRESS
         }
 
         GAME_INPUT(UP)
-        if (GAME_INPUT_RELEASE) {
+        if (GAME_INPUT_ON_RELEASE) {
             //ON RELEASE
             loopFlags |= decMenuSelect() ? LOOPFLAG_RMENU : 0;
-        } else {
-            //ON PRESS
         }
 
         GAME_INPUT(RIGHT)
-        if (GAME_INPUT_RELEASE) {
+        if (GAME_INPUT_ON_RELEASE) {
             //ON RELEASE
             loopFlags |= SYSTEM->selectedMenuItem->callback() & 0x0F;
-        } else {
-            //ON PRESS
         }
 
         if (loopFlags & LOOPFLAG_RMENU) {

@@ -5,7 +5,10 @@
 #ifndef ECON_SYSTEM_H
 #define ECON_SYSTEM_H
 
+#include "main.h"
+
 #define EPICF_LOOP_CALLBACK EPICF_loopCallback();
+#define CURRENT_TIME HAL_GetTick()
 
 void EPICF_loopCallback();
 

@@ -43,6 +43,8 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 
+set(GAMES TestGame)
+
 include_directories(${includes})
 
 add_definitions(${defines})
