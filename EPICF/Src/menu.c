@@ -21,6 +21,7 @@
 #define SELECTED_COLOR WHITE
 #define INSIDE_COLOR GREEN
 
+//Not allot needed to explain here, this is just an internal function for renderMenu
 void renderMenuEntry(int16_t y, struct MenuItem* item) {
     uint16_t off = (ENTRY_HEIGHT - (MENU_TEXT_SIZE * CHAR_HEIGHT)) / 2;
     uint16_t size = MENU_TEXT_SIZE * CHAR_WIDTH * strlen(item->text);
@@ -73,6 +74,10 @@ void renderMenu() {
     }
 }
 
+/**
+ * @brief Increments the selected entry to the next menu entry
+ * @return It returns 0 if it didn't change anything, this can happen when we are at the bottom of the menu
+ */
 uint8_t incMenuSelect() {
     uint8_t size = SYSTEM->menuFlags & 0x0F;
     for (int i = 0; i < size - 1; i++) {
@@ -86,6 +91,10 @@ uint8_t incMenuSelect() {
     return 0;
 }
 
+/**
+ * @brief Decrements the selected entry to the prev menu entry
+ * @return It returns 0 if it didn't change anything, this can happen when we are at the top of the menu
+ */
 uint8_t decMenuSelect() {
     uint8_t size = SYSTEM->menuFlags & 0x0F;
     for (int i = 1; i < size; i++) {
