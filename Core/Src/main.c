@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "epicf.h"
+#include "game-list.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -93,13 +94,14 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
-    EPICF_initSystem();
+  EPICF_initSystem();
+  EPICF_initGames(GAMES_LENGTH, GAMES_LIST);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    return EPICF_startLoop();
+  return EPICF_startLoop();
 }
 
 void EPICF_loopCallback() {

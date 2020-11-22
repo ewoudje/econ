@@ -1,0 +1,17 @@
+//
+// Created by ewoudje on 21/11/20.
+//
+
+#ifndef GAME_LIST_H
+#define GAME_LIST_H
+
+#include "game.h"
+#define GAMES_LENGTH @GAMES_LENGTH@
+#define GAMES_LIST &gameList
+
+@GAME_EXTERNS@
+@GAME_CONST_LIST@
+
+
+
+#endif //GAME_LIST_H

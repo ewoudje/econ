@@ -10,8 +10,7 @@
 struct MenuItem {
     char* text;
     uint16_t textColor;
-    uint16_t color;
-    uint16_t (*callback)()
+    uint16_t (*callback)();
 };
 
 void renderMenu();

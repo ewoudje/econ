@@ -5,9 +5,16 @@
 #include "gfx.h"
 #include "font.h"
 
-/*Draws a character (fonts imported from fonts.h) at X,Y location with specified font colour, size and Background colour*/
-/*See fonts.h implementation of font on what is required for changing to a different font when switching fonts libraries*/
-void gfx_drawChar(char chr, uint16_t x, uint16_t y, uint16_t color, uint16_t size)
+/**
+ * @brief Draws a char at a certain position with a certain color
+ * @todo this could be optimized? ATM it draws pixel per pixel?
+ * @param x
+ * @param y
+ * @param chr the char you want to draw
+ * @param size of the character
+ * @param color
+ */
+void gfx_drawChar(uint16_t x, uint16_t y, char chr, uint16_t size, uint16_t color)
 {
     uint8_t 	function_char;
     uint8_t 	i,j;
@@ -43,7 +50,16 @@ void gfx_drawChar(char chr, uint16_t x, uint16_t y, uint16_t color, uint16_t siz
     }
 }
 
-void gfx_drawText(uint16_t x, uint16_t y, char* text, uint16_t size) {
+/**
+ * @brief draws a whole string with gfx_drawChar
+ * @note for more info see gfx_drawChar
+ * @param x
+ * @param y
+ * @param text
+ * @param size
+ * @param color
+ */
+void gfx_drawText(uint16_t x, uint16_t y, char* text, uint16_t size, uint16_t color) {
     while (*text) {
         gfx_drawChar(*text++, x, y, BLACK, size);
         x += CHAR_WIDTH * size;

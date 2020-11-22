@@ -5,8 +5,12 @@
 #ifndef EPICF_H
 #define EPICF_H
 
-int EPICF_startLoop();
+#include "../Inc/error.h"
 
-int EPICF_initSystem();
+ERROR_CODE EPICF_startLoop();
+
+ERROR_CODE EPICF_initSystem();
+
+void EPICF_initGames(uint8_t length, void** games);
 
 #endif //EPICF_H

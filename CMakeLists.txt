@@ -13,7 +13,7 @@ set(SIZE arm-none-eabi-size)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 # project settings
-project(ECON-DEV C CXX ASM)
+project(ECON-DEV C)
 set(CMAKE_C_STANDARD 11)
 
 #Uncomment for hardware floating point
@@ -44,11 +44,9 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 
-set(EPICF_PLATFORM ${ECON-DEV_SOURCE_DIR}/Core/Platform)
+set(GAMES TestGame)
 
-add_subdirectory(EPICF)
-
-include_directories(Core/Inc EPICF/Platform Drivers/STM32F1xx_HAL_Driver/Inc Drivers/STM32F1xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F1xx/Include Drivers/CMSIS/Include)
+include_directories(Core/Inc Drivers/STM32F1xx_HAL_Driver/Inc Drivers/STM32F1xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F1xx/Include Drivers/CMSIS/Include)
 
 add_definitions(-DUSE_HAL_DRIVER -DSTM32F103xB -DDEBUG)
 
@@ -61,7 +59,13 @@ add_link_options(-mcpu=cortex-m3 -mthumb -mthumb-interwork)
 add_link_options(-T ${LINKER_SCRIPT})
 
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
-target_link_libraries(${PROJECT_NAME}.elf EPICF)
+target_link_libraries(${PROJECT_NAME}.elf EPICF ${GAMES})
+
+set(EPICF_PLATFORM ${ECON-DEV_SOURCE_DIR}/Core/Platform)
+
+add_subdirectory(EPICF)
+
+add_subdirectory(Games)
 
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
 set(BIN_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin)

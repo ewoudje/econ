@@ -26,9 +26,12 @@ void renderMenuEntry(int16_t y, struct MenuItem* item) {
     uint16_t size = MENU_TEXT_SIZE * CHAR_WIDTH * strlen(item->text);
     uint16_t x = (MENU_WIDTH - size) / 2;
     display_setRect(MENU_OFFSET, y, MENU_WIDTH, ENTRY_HEIGHT, SYSTEM->selectedMenuItem == item ? SELECTED_COLOR : ENTRY_COLOR);
-    gfx_drawText(x, y + off, item->text, MENU_TEXT_SIZE);
+    gfx_drawText(x, y + off, item->text, MENU_TEXT_SIZE, item->textColor);
 }
 
+/**
+ * @brief renders menu to screen based of the global SystemContext
+ */
 void renderMenu() {
     if (SYSTEM->menuFlags & MENUFLAG_SHOW) {
         uint8_t size = SYSTEM->menuFlags & 0x0F;
