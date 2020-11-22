@@ -9,8 +9,6 @@
 
 #define LOOPFLAG_RMENU 0x01
 
-uint16_t testCall();
-
 struct SystemContext* currentSystem;
 
 /**
@@ -20,12 +18,10 @@ struct SystemContext* currentSystem;
 ERROR_CODE EPICF_initSystem() {
     SYSTEM = malloc(sizeof(*SYSTEM));
     SYSTEM->systemFlags = SYSFLAG_ENABLED;
-    SYSTEM->menuFlags = MENUFLAG_SHOW | 6;
-    SYSTEM->selectedMenuItem = &SYSTEM->currentMenuItems[3];
+    SYSTEM->menuFlags = 0;
+    SYSTEM->selectedMenuEntry = &SYSTEM->currentMenuEntries[0];
     SYSTEM->totalGames = 0;
     SYSTEM->totalGamesCount = 0;
-
-    testCall();
 
     display_init();
 
@@ -80,7 +76,7 @@ ERROR_CODE EPICF_startLoop() {
         GAME_INPUT(RIGHT)
         if (GAME_INPUT_ON_RELEASE) {
             //ON RELEASE
-            loopFlags |= SYSTEM->selectedMenuItem->callback() & 0x0F;
+            loopFlags |= SYSTEM->selectedMenuEntry->callback() & 0x0F;
         }
 
         if (loopFlags & LOOPFLAG_RMENU) {
@@ -91,39 +87,6 @@ ERROR_CODE EPICF_startLoop() {
     }
 
     return EPICF_ERROR_SYS_DISABLED;
-}
-
-uint8_t toggle = 1;
-
-uint16_t testCall() {
-
-    if (toggle) {
-        SYSTEM->currentMenuItems[0].text = "Hello";
-        SYSTEM->currentMenuItems[0].callback = renderMenu;
-        SYSTEM->currentMenuItems[0].textColor = WHITE;
-        SYSTEM->currentMenuItems[1].text = "World";
-        SYSTEM->currentMenuItems[1].callback = renderMenu;
-        SYSTEM->currentMenuItems[1].textColor = WHITE;
-        SYSTEM->currentMenuItems[2].text = "!";
-        SYSTEM->currentMenuItems[2].callback = renderMenu;
-        SYSTEM->currentMenuItems[2].textColor = WHITE;
-        SYSTEM->currentMenuItems[3].text = "By Ewoud";
-        SYSTEM->currentMenuItems[3].callback = testCall;
-        SYSTEM->currentMenuItems[3].textColor = WHITE;
-        SYSTEM->currentMenuItems[4].text = "Test4";
-        SYSTEM->currentMenuItems[4].textColor = WHITE;
-        SYSTEM->currentMenuItems[5].text = "Test5";
-        SYSTEM->currentMenuItems[5].textColor = WHITE;
-        toggle = 0;
-    } else {
-        SYSTEM->currentMenuItems[0].text = "Ewoud";
-        SYSTEM->currentMenuItems[0].textColor = RED;
-        SYSTEM->currentMenuItems[1].text = "Is";
-        SYSTEM->currentMenuItems[2].text = "GOD";
-        toggle = 1;
-    }
-
-    return LOOPFLAG_RMENU;
 }
 
 /**

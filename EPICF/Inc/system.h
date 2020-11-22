@@ -15,10 +15,11 @@
 uint8_t gameLoopCall();
 
 struct SystemContext {
-    struct MenuItem currentMenuItems[6]; //This shouldn't be hard defined in the EPICF code but the max amount of menu entries on this display is 6
+    struct MenuEntry* currentMenuEntries;
+    struct Menu* menu; //Only used for scrolling
     uint8_t menuFlags;
     uint8_t systemFlags;
-    struct MenuItem *selectedMenuItem;
+    struct MenuEntry* selectedMenuEntry;
     void* currentGame;
     struct GameDescription* gameDesc;
     struct GameDescription** totalGames;
