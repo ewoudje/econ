@@ -11,13 +11,16 @@
 //The Joystick isn't used here since i have yet to have that component...
 struct GameState {
     uint16_t posX, posY;
-    uint16_t counterX, counterY;
+    int16_t counterX, counterY;
 };
 
 //I might want to do this differently
 //I also tried making a global variable and give it the current pointer but it would be risky
 //if i would be moving gamestate data around in memory
 #define gameState ((struct GameState*)(SYSTEM->currentGame))
+
+//After how many ticks holding the buttons should we move 1 pixel?
+#define DELTA_STEP 30
 
 uint16_t resume() {
     //You are supposed to fully redraw the screen on resume
@@ -26,7 +29,7 @@ uint16_t resume() {
     // and then draw it on resume.
 
     display_clear(BLACK);
-    display_setRect(gameState->posX - 5, gameState->posY - 5, gameState->posX + 5, gameState->posY + 5, WHITE);
+    display_setRect(gameState->posX - 5, gameState->posY - 5, 10, 10, WHITE);
 
     //You can also make a game without this macro as long as you call the correct calls
     //But other macros might depend on it, so this is the recommended way of doing things
@@ -35,12 +38,12 @@ uint16_t resume() {
         //Here we add the delta to the side we want to go
         GAME_INPUT(UP)
         if (GAME_INPUT_PRESSED) {
-            gameState->counterY += delta;
+            gameState->counterY -= delta;
         }
 
         GAME_INPUT(DOWN)
         if (GAME_INPUT_PRESSED) {
-            gameState->counterY -= delta;
+            gameState->counterY += delta;
         }
 
         GAME_INPUT(RIGHT)
@@ -53,38 +56,46 @@ uint16_t resume() {
             gameState->counterX -= delta;
         }
 
-        //If the counters reach above 100 we move our white block by 1 pixel
-        //So this means we move 10 pixels per second if we hold the key in
+        //If the counters reach above DELTA_STEP we move our white block by 1 pixel
+        //So this means we move 10 pixels per second if DELTA_STEP == 100
         //As you can see i also don't set the counters to 0 when we reach it, this i bad practice since
         // you can skip time if you do that (ofc in this example it doesn't matter much)
 
         //I know this can beter but this is a test game and otherwise i have to think...
-        if (gameState->counterX > 100) {
-            display_setRect(gameState->posX - 5, gameState->posY - 5, gameState->posX - 4, gameState->posY + 5, BLACK);
-            gameState->posX++;
-            display_setRect(gameState->posX + 5, gameState->posY - 5, gameState->posX + 4, gameState->posY + 5, WHITE);
-            gameState->counterX -= 100;
+        if (gameState->counterX > DELTA_STEP) {
+            if ((gameState->posX + 5) != DISPLAY_WIDTH) {
+                display_setRect(gameState->posX - 5, gameState->posY - 5, 1, 10, BLACK);
+                gameState->posX++;
+                display_setRect(gameState->posX + 4, gameState->posY - 5, 1, 10, WHITE);
+            }
+            gameState->counterX -= DELTA_STEP;
         }
 
-        if (gameState->counterY > 100) {
-            display_setRect(gameState->posX - 5, gameState->posY - 5, gameState->posX - 5, gameState->posY - 4, BLACK);
-            gameState->posY++;
-            display_setRect(gameState->posX + 5, gameState->posY + 4, gameState->posX + 5, gameState->posY + 5, WHITE);
-            gameState->counterY -= 100;
+        if (gameState->counterY > DELTA_STEP) {
+            if ((gameState->posY + 5) != DISPLAY_HEIGHT) {
+                display_setRect(gameState->posX - 5, gameState->posY - 5, 10, 1, BLACK);
+                gameState->posY++;
+                display_setRect(gameState->posX - 5, gameState->posY + 4, 10, 1, WHITE);
+            }
+            gameState->counterY -= DELTA_STEP;
         }
 
         if (gameState->counterX < 0) {
-            display_setRect(gameState->posX + 5, gameState->posY - 5, gameState->posX + 4, gameState->posY + 5, BLACK);
-            gameState->posX--;
-            display_setRect(gameState->posX - 5, gameState->posY - 5, gameState->posX - 4, gameState->posY + 5, WHITE);
-            gameState->counterX += 100;
+            if ((gameState->posX - 5) != 0) {
+                display_setRect(gameState->posX + 5, gameState->posY - 5, 1, 10, BLACK);
+                gameState->posX--;
+                display_setRect(gameState->posX - 4, gameState->posY - 5, 1, 10, WHITE);
+            }
+            gameState->counterX += DELTA_STEP;
         }
 
         if (gameState->counterY < 0) {
-            display_setRect(gameState->posX + 5, gameState->posY + 4, gameState->posX + 5, gameState->posY + 5, BLACK);
-            gameState->posY--;
-            display_setRect(gameState->posX - 5, gameState->posY - 5, gameState->posX - 5, gameState->posY - 4, WHITE);
-            gameState->counterY += 100;
+            if ((gameState->posY - 5) != 0) {
+                display_setRect(gameState->posX - 5, gameState->posY + 5, 10, 1, BLACK);
+                gameState->posY--;
+                display_setRect(gameState->posX - 5, gameState->posY - 4, 10, 1, WHITE);
+            }
+            gameState->counterY += DELTA_STEP;
         }
     GAME_LOOP_END //END OF LOOP macro
 }

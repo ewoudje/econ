@@ -10,7 +10,8 @@
 struct MenuEntry {
     char* text;
     uint16_t textColor;
-    uint16_t (*callback)();
+    uint16_t (*callback)(void* xtra);
+    void* xtra;
 };
 
 struct Menu {
@@ -25,6 +26,8 @@ uint8_t incMenuSelect();
 uint8_t decMenuSelect();
 
 struct MenuEntry newMenuEntry(uint16_t (*callback)(), char* text);
+
+struct MenuEntry newMenuEntryX(uint16_t (*callback)(void*), char* text, void* xtra);
 
 struct Menu* newMenu(uint32_t amount);
 

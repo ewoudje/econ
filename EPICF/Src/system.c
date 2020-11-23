@@ -20,12 +20,22 @@ ERROR_CODE EPICF_initSystem() {
     SYSTEM->systemFlags = SYSFLAG_ENABLED;
     SYSTEM->menuFlags = 0;
     SYSTEM->selectedMenuEntry = &SYSTEM->currentMenuEntries[0];
+    SYSTEM->currentGame = 0;
+    SYSTEM->gameDesc = 0;
     SYSTEM->totalGames = 0;
     SYSTEM->totalGamesCount = 0;
 
     display_init();
 
     return 0;
+}
+
+struct Menu* gameMenu;
+struct Menu* mainMenu;
+
+uint16_t startGame(struct GameDescription* desc) {
+    loadGame(desc);
+    return desc->start();
 }
 
 /**
@@ -36,6 +46,18 @@ ERROR_CODE EPICF_initSystem() {
 void EPICF_initGames(uint8_t length, void** games) {
     SYSTEM->totalGames = (struct GameDescription**)games;
     SYSTEM->totalGamesCount = length;
+
+    gameMenu = newMenu(length);
+    for (int i = 0; i < length; i++) {
+        gameMenu->array[i] = newMenuEntryX(startGame, SYSTEM->totalGames[i]->name, SYSTEM->totalGames[i]);
+    }
+}
+
+//INTERNAL FUNCTION
+uint16_t useGameMenu() {
+    useMenu(gameMenu);
+    renderMenu();
+    return 0;
 }
 
 /**
@@ -47,13 +69,21 @@ ERROR_CODE EPICF_startLoop() {
     if (!SYSTEM->totalGamesCount)
         return EPICF_ERROR_NO_GAMES;
 
-    renderMenu();
-
     uint8_t loopFlags;
     uint16_t inputChange;
-    EPICF_INPUT_VAR(prevInput);
+    EPICF_INPUT_VAR(prevInput)
+
+    EPICF_UPDATE_INPUT
 
     prevInput = EPICF_buttons;
+
+    mainMenu = newMenu(2);
+    mainMenu->array[0] = newMenuEntry(useGameMenu, "Games");
+    mainMenu->array[1] = newMenuEntry(renderMenu, "Resume");
+
+    useMenu(mainMenu);
+
+    renderMenu();
 
     while(SYSTEM->systemFlags & SYSFLAG_ENABLED) {
         EPICF_LOOP_CALLBACK
@@ -76,7 +106,7 @@ ERROR_CODE EPICF_startLoop() {
         GAME_INPUT(RIGHT)
         if (GAME_INPUT_ON_RELEASE) {
             //ON RELEASE
-            loopFlags |= SYSTEM->selectedMenuEntry->callback() & 0x0F;
+            loopFlags |= SYSTEM->selectedMenuEntry->callback(SYSTEM->selectedMenuEntry->xtra) & 0x0F;
         }
 
         if (loopFlags & LOOPFLAG_RMENU) {

@@ -7,7 +7,7 @@
 
 #include "game.h"
 #define GAMES_LENGTH 1
-#define GAMES_LIST (void**)&gameList
+#define GAMES_LIST &gameList
 
 extern struct GameDescription TestGame;
 

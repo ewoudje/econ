@@ -61,7 +61,7 @@ void gfx_drawChar(uint16_t x, uint16_t y, char chr, uint16_t size, uint16_t colo
  */
 void gfx_drawText(uint16_t x, uint16_t y, char* text, uint16_t size, uint16_t color) {
     while (*text) {
-        gfx_drawChar(*text++, x, y, BLACK, size);
+        gfx_drawChar(x, y, *text++, size, color);
         x += CHAR_WIDTH * size;
     }
 }

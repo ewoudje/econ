@@ -47,9 +47,9 @@ extern struct SystemContext* currentSystem;
     }
 
 #define GAME_INPUT(w) \
-    inputChange = (EPICF_INPUT_BUTTON_ ## w (EPICF_buttons) != EPICF_INPUT_BUTTON_ ## w (EPICF_buttons)) | (EPICF_INPUT_BUTTON_ ## w (EPICF_buttons) << 8);
+    inputChange = (EPICF_INPUT_BUTTON_ ## w (EPICF_buttons) != EPICF_INPUT_BUTTON_ ## w (prevInput)) | (EPICF_INPUT_BUTTON_ ## w (EPICF_buttons) << 8);
 
-#define GAME_INPUT_ON_RELEASE (inputChange & 0xFF00) && (inputChange & 0x00FF)
+#define GAME_INPUT_ON_RELEASE ((inputChange & 0xFF00) == 0) && (inputChange & 0x00FF)
 #define GAME_INPUT_ON_PRESS (inputChange & 0xFF00) && (inputChange & 0x00FF)
 #define GAME_INPUT_PRESSED (inputChange & 0xFF00)
 

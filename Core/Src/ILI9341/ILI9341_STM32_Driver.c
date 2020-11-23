@@ -501,8 +501,8 @@ void display_setPixel(uint16_t x, uint16_t y, uint16_t color) {
     ILI9341_Draw_Pixel(x, y, color);
 }
 
-void display_setRect(uint16_t x, uint16_t y, uint16_t xx, uint16_t yy, uint16_t color) {
-    ILI9341_Draw_Rectangle(x, y, xx, yy, color);
+void display_setRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color) {
+    ILI9341_Draw_Rectangle(x, y, width, height, color);
 }
 
 void display_clear(uint16_t Colour)

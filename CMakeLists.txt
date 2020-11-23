@@ -13,7 +13,7 @@ set(SIZE arm-none-eabi-size)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 # project settings
-project(ECON-DEV C)
+project(ECON-DEV C ASM)
 set(CMAKE_C_STANDARD 11)
 
 #Uncomment for hardware floating point
@@ -59,13 +59,14 @@ add_link_options(-mcpu=cortex-m3 -mthumb -mthumb-interwork)
 add_link_options(-T ${LINKER_SCRIPT})
 
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
-target_link_libraries(${PROJECT_NAME}.elf EPICF ${GAMES})
 
 set(EPICF_PLATFORM ${ECON-DEV_SOURCE_DIR}/Core/Platform)
 
 add_subdirectory(EPICF)
 
 add_subdirectory(Games)
+
+target_link_libraries(${PROJECT_NAME}.elf EPICF ${GAMES})
 
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
 set(BIN_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin)

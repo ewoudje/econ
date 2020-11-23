@@ -123,16 +123,32 @@ uint8_t decMenuSelect() {
 
 /**
  * @brief Create a new entry with default values
- * Don't forget to DEALLOCATE the entries...
  * @param callback of the menu entry
  * @param text of the menu entry
  * @return An menu entry
  */
 struct MenuEntry newMenuEntry(uint16_t (*callback)(), char* text) {
     struct MenuEntry entry;
-    entry.textColor = WHITE;
+    entry.textColor = BLACK;
     entry.callback = callback;
     entry.text = text;
+    entry.xtra = 0;
+    return entry;
+}
+
+/**
+ * @brief Create a new entry with default values
+ * @param callback of the menu entry
+ * @param text of the menu entry
+ * @param xtra a pointer to certain usable data that gets given with the callback
+ * @return An menu entry
+ */
+struct MenuEntry newMenuEntryX(uint16_t (*callback)(void*), char* text, void* xtra) {
+    struct MenuEntry entry;
+    entry.textColor = BLACK;
+    entry.callback = callback;
+    entry.text = text;
+    entry.xtra = xtra;
     return entry;
 }
 
